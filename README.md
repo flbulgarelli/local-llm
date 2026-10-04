@@ -118,4 +118,3 @@ On OOM or "not enough KV cache", adjust the profile in this order:
 2. Permitir alternar los modelos y usar uno u otro según la tarea que elija le usuarie.
 3. Relajar el modo offline para que pueda acceder a la web
 4. Asegurarse de que pueda correr en multiples placas GPU
-5. Quitar referencias a `RTX A6000`
