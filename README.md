@@ -98,6 +98,8 @@ On OOM or "not enough KV cache", adjust the profile in this order:
 4. add `--enforce-eager` (saves ~0.5-1 GB, slightly slower)
 5. switch to a smaller quantization profile
 
+Para distribuir el modelo en múltiples GPUs, configurá `TENSOR_PARALLEL_SIZE=N` en `config.env`.
+
 ## Offline hardening (already configured)
 
 - vLLM: `HF_HUB_OFFLINE`, `TRANSFORMERS_OFFLINE`, usage stats off; model loaded from a local path.
@@ -117,4 +119,3 @@ On OOM or "not enough KV cache", adjust the profile in this order:
 1. Dar soporte para qwen-code o similar
 2. Permitir alternar los modelos y usar uno u otro según la tarea que elija le usuarie.
 3. Relajar el modo offline para que pueda acceder a la web
-4. Asegurarse de que pueda correr en multiples placas GPU
