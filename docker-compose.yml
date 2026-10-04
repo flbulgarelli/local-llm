@@ -1,0 +1,77 @@
+# One vLLM model + Open WebUI on a single GPU.
+# Do not run "docker compose" directly: use ./scripts/run.sh <profile>, which loads
+# config.env (shared settings) and profiles/<profile>.env (model settings).
+name: local-llm
+
+services:
+  vllm:
+    image: vllm/vllm-openai:${VLLM_TAG}
+    container_name: vllm
+    restart: unless-stopped
+    ipc: host                      # recommended by vLLM (shared memory for workers)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ./models:/models:ro
+    environment:
+      HF_HUB_OFFLINE: "1"          # never try to reach huggingface.co
+      TRANSFORMERS_OFFLINE: "1"
+      VLLM_NO_USAGE_STATS: "1"     # no telemetry
+      DO_NOT_TRACK: "1"
+    command: >
+      --model /models/${MODEL_DIR}
+      --served-model-name ${SERVED_MODEL_NAME}
+      --host 0.0.0.0
+      --port 8000
+      --api-key ${VLLM_API_KEY}
+      --max-model-len ${MAX_MODEL_LEN}
+      --gpu-memory-utilization ${GPU_MEMORY_UTILIZATION}
+      --max-num-seqs ${MAX_NUM_SEQS}
+      ${EXTRA_VLLM_ARGS}
+    ports:
+      # Bound to localhost by default. Set VLLM_BIND=0.0.0.0 in config.env
+      # if IDE plugins / scripts on other machines must reach the API.
+      - "${VLLM_BIND:-127.0.0.1}:8000:8000"
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 900s           # large models can take minutes to load
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:${OPENWEBUI_TAG}
+    container_name: open-webui
+    restart: unless-stopped
+    depends_on:
+      - vllm
+    volumes:
+      - open-webui-data:/app/backend/data
+      - ./models/_embeddings:/embeddings:ro
+    environment:
+      # --- backend connection (vLLM's OpenAI-compatible API) ---
+      OPENAI_API_BASE_URL: http://vllm:8000/v1
+      OPENAI_API_KEY: ${VLLM_API_KEY}
+      ENABLE_OPENAI_API: "true"
+      ENABLE_OLLAMA_API: "false"
+      # --- offline hardening ---
+      OFFLINE_MODE: "true"
+      HF_HUB_OFFLINE: "1"
+      ENABLE_WEB_SEARCH: "false"
+      RAG_EMBEDDING_MODEL: /embeddings/all-MiniLM-L6-v2   # pre-downloaded by prepare.sh
+      RAG_EMBEDDING_MODEL_AUTO_UPDATE: "false"
+      ANONYMIZED_TELEMETRY: "false"
+      SCARF_NO_ANALYTICS: "true"
+      DO_NOT_TRACK: "true"
+      # --- misc ---
+      WEBUI_SECRET_KEY: ${WEBUI_SECRET_KEY}
+    ports:
+      - "${WEBUI_PORT:-3000}:8080"
+
+volumes:
+  open-webui-data:

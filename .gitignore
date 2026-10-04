@@ -1,0 +1,4 @@
+models/*
+!models/.gitkeep
+*.tar
+.active-profile
