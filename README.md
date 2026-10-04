@@ -5,7 +5,6 @@
 Este proyecto contiene scrips de instalación y configuración de un entorno de
 ejecución LLM open source.
 
-
 ## Arquitectura
 
 
@@ -58,35 +57,53 @@ Full details (RAM, CPU, disk, smallest NVIDIA card, GPU generations): **[docs/HA
 NVIDIA driver, Docker with the Compose plugin (v2.17+ for multiple `--env-file`), and the
 NVIDIA Container Toolkit. Linux recommended; Windows works via Docker Desktop + WSL2.
 
-## 1. Prepare (online, once per model)
+## Uso paso a paso
+
+### 1. Configurar claves
+
+Editá el archivo `config.env` y actualizá los valores de `VLLM_API_KEY` y `WEBUI_SECRET_KEY`.
+
+### 2. Preparar entorno
+
+El siguiente paso es descargar los archivos de pesos y las imágenes docker de `Open WebUI` y `vLLM`:
 
 ```bash
-# edit config.env first: set VLLM_API_KEY and WEBUI_SECRET_KEY
+# para pruebas sin GPU
+./scripts/prepare.sh qwen2.5-0.5b-cpu
+./scripts/prepare.sh smollm2-135m-cpu
 
-
-./scripts/prepare.sh qwen2.5-0.5b-cpu # para pruebas sin GPU
+# para pruebas con GPU
 ./scripts/prepare.sh qwen3.8-27b-fp8
-./scripts/prepare.sh olmo3-7b-fp8-16gb     # any other profiles you want available offline
+./scripts/prepare.sh olmo3-7b-fp8-16gb
+# o cualquiera de los otros modelos...
 ```
 
-Air-gapped target: run prepare on a connected machine with `--export-images`, copy the
-whole project folder plus the `.tar` file, then `docker load -i images-<profile>.tar`.
-
-## 2. Run / switch (offline)
+### 3. Ejecutar el entorno
 
 ```bash
-./scripts/run.sh qwen3.8-27b-fp8        # start
-./scripts/run.sh logs                   # ready when "Application startup complete"
-./scripts/run.sh olmo3-7b-fp8-16gb   # switch: only vLLM restarts, chats are kept
+./scripts/run.sh qwen3.8-27b-fp8
 ./scripts/run.sh status
+./scripts/run.sh logs
+```
+
+Luego navegá a http://localhost:3000 y creá una cuenta. El modelo elegido debería cargar tras algunos segundos o minutos. Otras herramientas pueden llamar programáticamente al modelo accediendo a `http://localhost:8000/v1` con la clave provista en `VLLM_API_KEY` y el modelo `SERVED_MODEL_NAME`.
+
+### 4. Cambiar el modelo
+
+```bash
+# esto sólo reinicia a vLLM, no borra al estado de Open WebUI
+./scripts/run.sh olmo3-7b-fp8-16gb
+./scripts/run.sh status
+./scripts/run.sh logs
+```
+
+### 4. Detener al modelo
+
+```bash
 ./scripts/run.sh stop
 ```
 
-Open http://localhost:3000; the first account created becomes admin. The model appears in
-the model picker automatically. Other local tools (IDE plugins, scripts) can call
-`http://localhost:8000/v1` with `VLLM_API_KEY` and model name `SERVED_MODEL_NAME`.
-
-## Uso con Qwen Code
+## 5. Opcional: uso con Qwen Code
 
 [Qwen Code](https://github.com/QwenLM/qwen-code) soporta endpoints compatibles con OpenAI.
 Para apuntarlo a este stack, configurá:
@@ -133,11 +150,9 @@ Para distribuir el modelo en múltiples GPUs, configurá `TENSOR_PARALLEL_SIZE=N
 
 - **vLLM tries to reach huggingface.co**: the model folder is missing `config.json`; re-run prepare.
 - **Open WebUI shows no model**: vLLM is still loading (`./scripts/run.sh logs`) or the API keys
-  don't match. Admin panel -> Settings -> Connections to re-check.
+  don't match. Esperá unos segundos y recargará la página.
 - **Errors after changing `VLLM_TAG`**: pin it back to the version from the model card.
-- **Licenses**: Qwen and Olmo are Apache 2.0.
 
 ## Tareas futuras
 
-1. Permitir alternar los modelos y usar uno u otro según la tarea que elija le usuarie.
-3. Relajar el modo offline para que pueda acceder a la web
+1. Relajar el modo offline para que pueda acceder a la web
