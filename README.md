@@ -17,8 +17,12 @@ Tiene soporte para varios modelos, pero sólo úno funciona por vez, para lo cua
 
 Esto levanta al modelo utilizando `vLLM` y exponiendo un API estilo OpenAI en el puerto 8000. Además, expone una interfaz Web en el puerto 3000 mediante `Open WebUI`
 
-```
-Browser ──► Open WebUI (:3000) ──► vLLM (:8000, compatible con OpenAI API) ──► ./models/<model>
+```mermaid
+flowchart LR
+    B([Browser]) --> W["Open WebUI\n:3000"]
+    I(["Qwen Code"]) -. opcional .-> V
+    W --> V["vLLM :8000\nOpenAI-compatible API"]
+    V --> M[("./models/\nmodelo activo")]
 ```
 
 ## Project layout
@@ -80,6 +84,22 @@ Open http://localhost:3000; the first account created becomes admin. The model a
 the model picker automatically. Other local tools (IDE plugins, scripts) can call
 `http://localhost:8000/v1` with `VLLM_API_KEY` and model name `SERVED_MODEL_NAME`.
 
+## Uso con Qwen Code
+
+[Qwen Code](https://github.com/QwenLM/qwen-code) soporta endpoints compatibles con OpenAI.
+Para apuntarlo a este stack, configurá:
+
+| Campo      | Valor                                          |
+|------------|------------------------------------------------|
+| Base URL   | `http://localhost:8000/v1`                     |
+| API key    | el valor de `VLLM_API_KEY` en `config.env`     |
+| Model name | el valor de `SERVED_MODEL_NAME` del perfil activo |
+
+Usá cualquiera de los perfiles Qwen; los modelos Olmo no son aptos para programación.
+
+Si necesitás acceso desde otra máquina (por ejemplo, desde el IDE de una notebook),
+configurá `VLLM_BIND=0.0.0.0` en `config.env`.
+
 ## Adding a new model
 
 Copy a profile and change `HF_REPO`, `MODEL_DIR`, `SERVED_MODEL_NAME`; set `VLLM_TAG` to the
@@ -116,6 +136,5 @@ Para distribuir el modelo en múltiples GPUs, configurá `TENSOR_PARALLEL_SIZE=N
 
 ## Tareas futuras
 
-1. Dar soporte para qwen-code o similar
-2. Permitir alternar los modelos y usar uno u otro según la tarea que elija le usuarie.
+1. Permitir alternar los modelos y usar uno u otro según la tarea que elija le usuarie.
 3. Relajar el modo offline para que pueda acceder a la web

@@ -18,6 +18,7 @@ case "${1:-}" in
     PROFILE="$1"
     [[ -f "profiles/$PROFILE.env" ]] || { echo "Unknown profile: $PROFILE"; exit 1; }
     set -a; source config.env; source "profiles/$PROFILE.env"; set +a
+    [[ "${MODEL_RUNTIME:-runc}" == "nvidia" ]] && export VLLM_IMAGE="vllm/vllm-openai" || export VLLM_IMAGE="vllm/vllm-openai-cpu"
     [[ -f "models/$MODEL_DIR/config.json" ]] || { echo "Model missing in models/$MODEL_DIR. Run ./scripts/prepare.sh $PROFILE (online) first."; exit 1; }
     echo "$PROFILE" > .active-profile
     # "up -d" recreates only vllm when the profile changed; Open WebUI (and its chats) stays.

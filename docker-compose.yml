@@ -5,7 +5,7 @@ name: local-llm
 
 services:
   vllm:
-    image: vllm/vllm-openai:${VLLM_TAG}
+    image: ${VLLM_IMAGE}:${VLLM_TAG}
     container_name: vllm
     restart: unless-stopped
     ipc: host                      # recommended by vLLM (shared memory for workers)
