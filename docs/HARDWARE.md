@@ -15,6 +15,7 @@ No son un benchmark, sino una aproximación de lo que podría requerir para el u
 | `olmo3-7b-fp8-16gb`     | ~7.5 GB      | 16 GB (Ada o posterior) | 16 GB      | 4         | ~15 GB | ~32K                              |
 | `olmo3-7b-4bit-8gb`     | ~5 GB        | 8 GB                    | 16 GB      | 4         | ~15 GB | ~4-8K                             |
 | `qwen2.5-0.5b-cpu`      | —            | **sin GPU** (solo CPU)  | 4 GB       | 2         | ~2 GB  | 16K                               |
+| `smollm2-135m-cpu`      | —            | **sin GPU** (solo CPU)  | 2 GB       | 2         | ~1 GB  | 8K                                |
 
 Notas sobre las columnas:
 

@@ -48,6 +48,8 @@ local-llm/
 | `qwen3.6-35b-a3b-fp8`   | Qwen3.6-35B-A3B (MoE)        | 48 GB    | fastest generation; verify repo name |
 | `olmo3-7b-fp8-16gb`     | Olmo 3 7B Instruct           | 16 GB    | fully open model                     |
 | `olmo3-7b-4bit-8gb`     | Olmo 3 7B Instruct           | 8 GB     | RTX 4060-class, short context        |
+| `qwen2.5-0.5b-cpu`      | Qwen2.5-0.5B Instruct        | sin GPU  | solo CPU, para pruebas               |
+| `smollm2-135m-cpu`      | SmolLM2-135M Instruct        | sin GPU  | solo CPU, modelo mínimo de prueba    |
 
 Full details (RAM, CPU, disk, smallest NVIDIA card, GPU generations): **[docs/HARDWARE.md](docs/HARDWARE.md)**.
 
