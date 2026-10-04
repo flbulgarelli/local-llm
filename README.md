@@ -109,7 +109,8 @@ docs/HARDWARE.md. Then `./scripts/prepare.sh <new>` and `./scripts/run.sh <new>`
 
 ## Memory tuning
 
-vLLM reserves `GPU_MEMORY_UTILIZATION` x VRAM at startup: weights first, the rest is KV cache.
+vLLM reserves `MODEL_MEMORY_UTILIZATION` x VRAM at startup: weights first, the rest is KV cache.
+En el perfil CPU (`vllm/vllm-openai-cpu`) la misma variable controla fracción de RAM del sistema en lugar de VRAM.
 On OOM or "not enough KV cache", adjust the profile in this order:
 
 1. lower `MAX_MODEL_LEN` (e.g. 65536 -> 32768)

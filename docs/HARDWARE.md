@@ -14,7 +14,7 @@ No son un benchmark, sino una aproximación de lo que podría requerir para el u
 | `qwen3.6-35b-a3b-fp8`   | ~35 GB       | 48 GB                   | 48 GB      | 4         | ~37 GB | ~32K                              |
 | `olmo3-7b-fp8-16gb`     | ~7.5 GB      | 16 GB (Ada o posterior) | 16 GB      | 4         | ~15 GB | ~32K                              |
 | `olmo3-7b-4bit-8gb`     | ~5 GB        | 8 GB                    | 16 GB      | 4         | ~15 GB | ~4-8K                             |
-| `qwen2.5-0.5b-cpu`      | —            | **sin GPU** (solo CPU)  | 4 GB       | 2         | ~2 GB  | 4K                                |
+| `qwen2.5-0.5b-cpu`      | —            | **sin GPU** (solo CPU)  | 4 GB       | 2         | ~2 GB  | 16K                               |
 
 Notas sobre las columnas:
 
@@ -61,7 +61,7 @@ Funciona pero es ajustado: ~5 GB de pesos en 4-bit, ~1 GB de overhead de CUDA y 
 ~1.5 GB restantes de caché KV aguantan aproximadamente 4-8K tokens (Olmo 3 7B tiene 32
 cabezas KV completas, lo que hace su caché KV grande para su tamaño; el caché KV en FP8
 lo reduce a la mitad). Esperá uno o dos chats concurrentes. Si la placa también maneja un
-monitor, bajá más `GPU_MEMORY_UTILIZATION` (0.80) o `MAX_MODEL_LEN` a 4096.
+monitor, bajá más `MODEL_MEMORY_UTILIZATION` (0.80) o `MAX_MODEL_LEN` a 4096.
 
 En Windows, este stack corre a través de Docker Desktop con el backend WSL2, que soporta
 GPUs NVIDIA; asigná al menos 16 GB de RAM a WSL (`.wslconfig`).
