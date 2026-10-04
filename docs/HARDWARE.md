@@ -12,10 +12,10 @@ No son un benchmark, sino una aproximación de lo que podría requerir para el u
 | `qwen3.8-27b-fp8`       | ~27 GB       | 48 GB (32 GB = ~8K ctx) | 32 GB      | 4         | ~30 GB | 64K en 48 GB                      |
 | `qwen3.8-27b-gptq-int4` | ~18 GB       | 24 GB                   | 32 GB      | 4         | ~20 GB | ~16-32K en 24 GB; 64K+ en 48 GB   |
 | `qwen3.6-35b-a3b-fp8`   | ~35 GB       | 48 GB                   | 48 GB      | 4         | ~37 GB | ~32K                              |
+| `qwen2.5-0.5b-cpu`      | -            | (solo CPU)              | 4 GB       | 2         | ~2 GB  | 16K                               |
 | `olmo3-7b-fp8-16gb`     | ~7.5 GB      | 16 GB (Ada o posterior) | 16 GB      | 4         | ~15 GB | ~32K                              |
 | `olmo3-7b-4bit-8gb`     | ~5 GB        | 8 GB                    | 16 GB      | 4         | ~15 GB | ~4-8K                             |
-| `qwen2.5-0.5b-cpu`      | —            | **sin GPU** (solo CPU)  | 4 GB       | 2         | ~2 GB  | 16K                               |
-| `smollm2-135m-cpu`      | —            | **sin GPU** (solo CPU)  | 2 GB       | 2         | ~1 GB  | 8K                                |
+| `smollm2-135m-cpu`      | -            | (solo CPU)              | 2 GB       | 2         | ~1 GB  | 8K                                |
 
 Notas sobre las columnas:
 
@@ -55,21 +55,6 @@ Notas sobre las columnas:
 Driver mínimo de NVIDIA: el que requiera la versión de CUDA de la imagen de vLLM elegida
 (las imágenes recientes necesitan driver 570+ para CUDA 12.8+). Revisá las notas de la
 imagen al cambiar `VLLM_TAG`.
-
-## Olmo 3 7B en una RTX 4060 (8 GB)
-
-Funciona pero es ajustado: ~5 GB de pesos en 4-bit, ~1 GB de overhead de CUDA y los
-~1.5 GB restantes de caché KV aguantan aproximadamente 4-8K tokens (Olmo 3 7B tiene 32
-cabezas KV completas, lo que hace su caché KV grande para su tamaño; el caché KV en FP8
-lo reduce a la mitad). Esperá uno o dos chats concurrentes. Si la placa también maneja un
-monitor, bajá más `MODEL_MEMORY_UTILIZATION` (0.80) o `MAX_MODEL_LEN` a 4096.
-
-En Windows, este stack corre a través de Docker Desktop con el backend WSL2, que soporta
-GPUs NVIDIA; asigná al menos 16 GB de RAM a WSL (`.wslconfig`).
-
-Olmo 3 7B es un modelo de propósito general y notablemente más débil en código que
-Qwen3.8-27B. Sus ventajas principales son el tamaño y ser completamente abierto (pesos,
-datos y código de entrenamiento).
 
 ## Cómo estimar un modelo nuevo
 

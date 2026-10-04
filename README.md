@@ -39,16 +39,16 @@ local-llm/
 
 ## Profiles
 
-| Profile                 | Model                        | Min VRAM | Notes                                |
-|-------------------------|------------------------------|----------|--------------------------------------|
-| `qwen3.8-27b-fp8`       | Qwen3.8-27B (official FP8)   | 48 GB    | **default** for Ada/Hopper 48 GB     |
-| `qwen3.8-27b-nvfp4`     | Qwen3.8-27B (NVFP4)          | 32 GB    | Blackwell only, longest context      |
-| `qwen3.8-27b-gptq-int4` | Qwen3.8-27B (community int4) | 24 GB    | Ampere and 24-32 GB cards            |
-| `qwen3.6-35b-a3b-fp8`   | Qwen3.6-35B-A3B (MoE)        | 48 GB    | fastest generation; verify repo name |
-| `olmo3-7b-fp8-16gb`     | Olmo 3 7B Instruct           | 16 GB    | fully open model                     |
-| `olmo3-7b-4bit-8gb`     | Olmo 3 7B Instruct           | 8 GB     | RTX 4060-class, short context        |
-| `qwen2.5-0.5b-cpu`      | Qwen2.5-0.5B Instruct        | sin GPU  | solo CPU, para pruebas               |
-| `smollm2-135m-cpu`      | SmolLM2-135M Instruct        | sin GPU  | solo CPU, modelo mínimo de prueba    |
+| Profile                 | Model                        | Min VRAM | Notes                                    |
+|-------------------------|------------------------------|----------|------------------------------------------|
+| `qwen3.8-27b-fp8`       | Qwen3.8-27B (official FP8)   | 48 GB    | Use with Ada/Hopper 48 GB                |
+| `qwen3.8-27b-nvfp4`     | Qwen3.8-27B (NVFP4)          | 32 GB    | Use with Blackwell only, longest context |
+| `qwen3.8-27b-gptq-int4` | Qwen3.8-27B (community int4) | 24 GB    | Use with Ampere and 24-32 GB cards       |
+| `qwen3.6-35b-a3b-fp8`   | Qwen3.6-35B-A3B (MoE)        | 48 GB    | Fastest generation                       |
+| `qwen2.5-0.5b-cpu`      | Qwen2.5-0.5B Instruct        | -        | Solo CPU, para pruebas                   |
+| `olmo3-7b-fp8-16gb`     | Olmo 3 7B Instruct           | 16 GB    | Fully open model                         |
+| `olmo3-7b-4bit-8gb`     | Olmo 3 7B Instruct           | 8 GB     | Use with RTX 4060-class, short context   |
+| `smollm2-135m-cpu`      | SmolLM2-135M Instruct        | -        | solo CPU, para pruebas                   |
 
 Full details (RAM, CPU, disk, smallest NVIDIA card, GPU generations): **[docs/HARDWARE.md](docs/HARDWARE.md)**.
 
@@ -108,10 +108,10 @@ Luego navegá a http://localhost:3000 y creá una cuenta. El modelo elegido debe
 [Qwen Code](https://github.com/QwenLM/qwen-code) soporta endpoints compatibles con OpenAI.
 Para apuntarlo a este stack, configurá:
 
-| Campo      | Valor                                          |
-|------------|------------------------------------------------|
-| Base URL   | `http://localhost:8000/v1`                     |
-| API key    | el valor de `VLLM_API_KEY` en `config.env`     |
+| Campo      | Valor                                             |
+|------------|---------------------------------------------------|
+| Base URL   | `http://localhost:8000/v1`                        |
+| API key    | el valor de `VLLM_API_KEY` en `config.env`        |
 | Model name | el valor de `SERVED_MODEL_NAME` del perfil activo |
 
 Usá cualquiera de los perfiles Qwen; los modelos Olmo no son aptos para programación.
@@ -156,3 +156,5 @@ Para distribuir el modelo en múltiples GPUs, configurá `TENSOR_PARALLEL_SIZE=N
 ## Tareas futuras
 
 1. Relajar el modo offline para que pueda acceder a la web
+2. Probar integración con herramientas externas
+3. Depurar el listado de modelos de Qwen.
