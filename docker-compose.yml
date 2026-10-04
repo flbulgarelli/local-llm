@@ -9,16 +9,11 @@ services:
     container_name: vllm
     restart: unless-stopped
     ipc: host                      # recommended by vLLM (shared memory for workers)
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    runtime: ${MODEL_RUNTIME:-runc}   # set MODEL_RUNTIME=nvidia in GPU profiles
     volumes:
       - ./models:/models:ro
     environment:
+      NVIDIA_VISIBLE_DEVICES: ${NVIDIA_VISIBLE_DEVICES:-none}   # set to "all" in GPU profiles
       HF_HUB_OFFLINE: "1"          # never try to reach huggingface.co
       TRANSFORMERS_OFFLINE: "1"
       VLLM_NO_USAGE_STATS: "1"     # no telemetry

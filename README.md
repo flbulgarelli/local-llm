@@ -56,6 +56,9 @@ NVIDIA Container Toolkit. Linux recommended; Windows works via Docker Desktop + 
 
 ```bash
 # edit config.env first: set VLLM_API_KEY and WEBUI_SECRET_KEY
+
+
+./scripts/prepare.sh qwen2.5-0.5b-cpu # para pruebas sin GPU
 ./scripts/prepare.sh qwen3.8-27b-fp8
 ./scripts/prepare.sh olmo3-7b-fp8-16gb     # any other profiles you want available offline
 ```

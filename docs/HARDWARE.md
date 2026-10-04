@@ -25,6 +25,7 @@ NVFP4 or GPTQ variant according to the GPU generation (see "GPU generation" belo
 | `qwen3.6-35b-a3b-fp8`              | ~35 GB         | 48 GB                        | 48 GB          | 4        | ~37 GB | ~32K                | Yes, 32K                          |
 | `olmo3-7b-fp8-16gb`                | ~7.5 GB        | 16 GB (Ada or newer)         | 16 GB          | 4        | ~15 GB | ~32K                | Yes                               |
 | `olmo3-7b-4bit-8gb`                | ~5 GB          | 8 GB                         | 16 GB          | 4        | ~15 GB | ~4-8K               | Yes (use the FP8 profile instead) |
+| `qwen2.5-0.5b-cpu`                 | —              | **no GPU** (CPU only)        | 4 GB           | 2        | ~2 GB  | 4K                  | Yes (infrastructure testing only) |
 
 Notes on the columns:
 
