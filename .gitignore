@@ -2,3 +2,5 @@ models/*
 !models/.gitkeep
 *.tar
 .active-profile
+
+LOCAL.md

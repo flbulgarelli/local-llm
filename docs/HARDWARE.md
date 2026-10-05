@@ -34,23 +34,23 @@ Notas sobre las columnas:
 
 ## Placa NVIDIA mínima por perfil
 
-| Perfil                  | Placa mínima                                                                  | Placa recomendada                      |
-|-------------------------|-------------------------------------------------------------------------------|----------------------------------------|
-| `qwen3.8-27b-nvfp4`     | RTX PRO 4500 Blackwell (32 GB) o RTX 5090 (32 GB)                             | RTX PRO 5000 Blackwell (48 GB)         |
-| `qwen3.8-27b-fp8`       | RTX 6000 Ada (48 GB) / L40S (48 GB)                                           | ídem; RTX PRO 5000 Blackwell (48 GB)   |
-| `qwen3.8-27b-gptq-int4` | RTX 4500 Ada (24 GB), RTX PRO 4000 Blackwell (24 GB), RTX 4090 / 3090 (24 GB) | RTX 5000 Ada (32 GB) o cualquier 48 GB |
-| `qwen3.6-35b-a3b-fp8`   | RTX 6000 Ada (48 GB) / L40S (48 GB)                                           | RTX PRO 5000 Blackwell (48 GB)         |
-| `olmo3-7b-fp8-16gb`     | RTX 4060 Ti 16 GB, RTX 4000 Ada (20 GB)                                       | RTX 4500 Ada (24 GB)                   |
-| `olmo3-7b-4bit-8gb`     | RTX 4060 (8 GB)                                                               | preferir el perfil FP8 en 16 GB+       |
+| Perfil                  | Placa mínima                                                 | Placa recomendada             |
+|-------------------------|--------------------------------------------------------------|-------------------------------|
+| `qwen3.8-27b-fp8`       | 48 GB: RTX 6000 Ada / L40S                                   | 48 GB: RTX PRO 5000 Blackwell |
+| `qwen3.6-35b-a3b-fp8`   | 48 GB: RTX 6000 Ada / L40S                                   | 48 GB: RTX PRO 5000 Blackwell |
+| `qwen3.8-27b-nvfp4`     | 32 GB: RTX PRO 4500 Blackwell o RTX 5090                     | 48 GB: RTX PRO 5000 Blackwell |
+| `qwen3.8-27b-gptq-int4` | 24 GB: RTX 4500 Ada, RTX PRO 4000 Blackwell, RTX 4090 / 3090 | 32 GB: RTX 5000 Ada           |
+| `olmo3-7b-fp8-16gb`     | 16 GB: RTX 4060 Ti, RTX 4000 Ada                             | 24 GB: RTX 4500 Ada           |
+| `olmo3-7b-4bit-8gb`     | 8 GB: RTX 4060                                               | 16 GB                         |
 
 ## Generaciones compatibles
 
-| Generación                                        | FP8                | NVFP4  | Mejor perfil Qwen3.8                        |
-|---------------------------------------------------|--------------------|--------|---------------------------------------------|
-| Ampere (RTX 3090, A100)                           | emulado, más lento | no     | `qwen3.8-27b-gptq-int4`                     |
-| Ada (RTX 6000 Ada, L40S, RTX 4090/4060)           | nativo             | no     | `qwen3.8-27b-fp8` (48 GB) o GPTQ (24-32 GB) |
-| Hopper (H100, H200)                               | nativo             | no     | `qwen3.8-27b-fp8`                           |
-| Blackwell (RTX PRO 4000/4500/5000/6000, RTX 5090) | nativo             | nativo | `qwen3.8-27b-nvfp4`                         |
+| Generación                                        | FP8                | NVFP4  |
+|---------------------------------------------------|--------------------|--------|
+| Ampere (RTX 3090, A100)                           | emulado, más lento | no     |
+| Ada (RTX 6000 Ada, L40S, RTX 4090/4060)           | nativo             | no     |
+| Hopper (H100, H200)                               | nativo             | no     |
+| Blackwell (RTX PRO 4000/4500/5000/6000, RTX 5090) | nativo             | nativo |
 
 Driver mínimo de NVIDIA: el que requiera la versión de CUDA de la imagen de vLLM elegida
 (las imágenes recientes necesitan driver 570+ para CUDA 12.8+). Revisá las notas de la

@@ -37,25 +37,54 @@ local-llm/
 └── models/                 weights (filled by prepare.sh), mounted read-only
 ```
 
-## Profiles
+## Perfiles
 
-| Profile                 | Model                        | Min VRAM | Notes                                    |
-|-------------------------|------------------------------|----------|------------------------------------------|
-| `qwen3.8-27b-fp8`       | Qwen3.8-27B (official FP8)   | 48 GB    | Use with Ada/Hopper 48 GB                |
-| `qwen3.8-27b-nvfp4`     | Qwen3.8-27B (NVFP4)          | 32 GB    | Use with Blackwell only, longest context |
-| `qwen3.8-27b-gptq-int4` | Qwen3.8-27B (community int4) | 24 GB    | Use with Ampere and 24-32 GB cards       |
-| `qwen3.6-35b-a3b-fp8`   | Qwen3.6-35B-A3B (MoE)        | 48 GB    | Fastest generation                       |
-| `qwen2.5-0.5b-cpu`      | Qwen2.5-0.5B Instruct        | -        | Solo CPU, para pruebas                   |
-| `olmo3-7b-fp8-16gb`     | Olmo 3 7B Instruct           | 16 GB    | Fully open model                         |
-| `olmo3-7b-4bit-8gb`     | Olmo 3 7B Instruct           | 8 GB     | Use with RTX 4060-class, short context   |
-| `smollm2-135m-cpu`      | SmolLM2-135M Instruct        | -        | solo CPU, para pruebas                   |
+| Profile                 | Model                        | Min VRAM | Notes                  |
+|-------------------------|------------------------------|----------|------------------------|
+| `qwen3.8-27b-fp8`       | Qwen3.8-27B (official FP8)   | 48 GB    |                        |
+| `qwen3.8-27b-nvfp4`     | Qwen3.8-27B (NVFP4)          | 32 GB    |                        |
+| `qwen3.8-27b-gptq-int4` | Qwen3.8-27B (community int4) | 24 GB    |                        |
+| `qwen3.6-35b-a3b-fp8`   | Qwen3.6-35B-A3B (MoE)        | 48 GB    |                        |
+| `qwen2.5-0.5b-cpu`      | Qwen2.5-0.5B Instruct        | -        | Solo CPU, para pruebas |
+| `smollm2-135m-cpu`      | SmolLM2-135M Instruct        | -        | Solo CPU, para pruebas |
+| `olmo3-7b-fp8-16gb`     | Olmo 3 7B Instruct           | 16 GB    | Modelo 100% abierto    |
+| `olmo3-7b-4bit-8gb`     | Olmo 3 7B Instruct           | 8 GB     | Modelo 100% abierto    |
 
 Full details (RAM, CPU, disk, smallest NVIDIA card, GPU generations): **[docs/HARDWARE.md](docs/HARDWARE.md)**.
 
-## Host requirements
+## Requisitos
 
-NVIDIA driver, Docker with the Compose plugin (v2.17+ for multiple `--env-file`), and the
-NVIDIA Container Toolkit. Linux recommended; Windows works via Docker Desktop + WSL2.
+> Este repositorio asume Hardware NVIDIA (aunque bien podría usarse AMD).
+>
+> Será necesario contar con sus drivers, Docker, Docker Compose (v2.17+) y el NVIDIA Container Toolkit.
+
+Ejemplo de instalación de docker y docker compose (Ubuntu):
+
+```bash
+# Instalación de repositorios de Docker
+sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/nul
+sudo apt update
+
+# Instalación de Docker
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
+
+# Instalación de Docker Compose como plugin
+# (los scripts asumen docker compose, no docker-compose)
+sudo apt install -y docker-compose-plugin
+```
+
+Luego será necesario instalar los Drivers.
+
+Antes de empezar, se deberá reiniciar activar el Container Toolkit y reiniciar Docker:
+
+```bash
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+sudo nvidia-ctk runtime configure --runtime=containerd
+sudo systemctl restart containerd
+```
 
 ## Uso paso a paso
 
