@@ -185,5 +185,7 @@ Para distribuir el modelo en múltiples GPUs, configurá `TENSOR_PARALLEL_SIZE=N
 ## Tareas futuras
 
 1. Relajar el modo offline para que pueda acceder a la web
-2. Probar integración con herramientas externas
+2. Probar integración con herramientas externas (e.g. QwenCode)
 3. Depurar el listado de modelos de Qwen.
+4. Probar CrystalCoder para código
+5. Probar Olmo con parámetros corregidos
